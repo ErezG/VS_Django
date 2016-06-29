@@ -225,4 +225,5 @@ obj/
 [Tt]est[Rr]esult*
 *.dll
 *.sqlite3
+*.pyc
 dev-env/
