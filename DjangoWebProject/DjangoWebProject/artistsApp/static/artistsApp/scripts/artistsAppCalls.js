@@ -1,6 +1,4 @@
 function addArtist(artistName) {
-    //$('.ajaxProgress').show();
-
     var requestUrl = '/artists/addArtist';
     $.ajax({
         type: "POST",

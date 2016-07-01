@@ -54,13 +54,15 @@
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
+    <Folder Include="artistsApp\static\" />
+    <Folder Include="artistsApp\static\artistsApp\" />
+    <Folder Include="artistsApp\static\artistsApp\scripts\" />
     <Folder Include="DjangoWebProject\" />
     <Folder Include="artistsApp\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\static\app\scripts\artistsAppCalls.js">
-      <SubType>Code</SubType>
-    </Content>
+    <None Include="artistsApp\static\artistsApp\scripts\_references.js" />
+    <Content Include="artistsApp\static\artistsApp\scripts\artistsAppCalls.js" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
