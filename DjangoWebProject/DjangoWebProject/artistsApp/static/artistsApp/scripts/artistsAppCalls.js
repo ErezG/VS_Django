@@ -1,4 +1,6 @@
-function addArtist(artistName) {
+function addArtist() {
+    $('#addArtistResult')[0].innerText = '';
+    var artistName = $('#artistTxt')[0].value;
     var requestUrl = '/artists/addArtist';
     $.ajax({
         type: "POST",
@@ -10,10 +12,10 @@ function addArtist(artistName) {
             artist: artistName,
         },
         success: function (json) {
-            alert(json.result);
+            $('#addArtistResult')[0].innerText = json.result;
         },
         error: function (a, b, c) {
-            alert(b + ', ' + c);
+            console.log(b + ', ' + c);
         }
     });
 };

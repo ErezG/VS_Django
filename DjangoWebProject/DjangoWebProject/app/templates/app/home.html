@@ -35,20 +35,42 @@
     <br/>
     <br/>
 
-    <div>
+    <ul class="tab">
+        <li><a href="#" class="tablinks" onclick="openTab(event, 'addArtistTab')">Add artist</a></li>
+        <li><a href="#" class="tablinks" onclick="openTab(event, 'browseArtistsTab')">Browse artists</a></li>
+    </ul>
+
+    <div id="addArtistTab" class="tabcontent">
         <h3>Add Artist</h3>
-        <form>
-        </form>
-        <input type="text" id="artistTxt"/>
+        <input type="text" id="artistTxt" onkeydown="keyDown(event)"/>
+        <input type="button" value="add" onclick="addArtist()"/>
         <br/>
         <br/>
-        <input type="button" value="add" onclick="addArtist($('#artistTxt')[0].value)"/>
+        <div id="addArtistResult"></div>
+    </div>
+
+    <div id="browseArtistsTab" class="tabcontent">
+        <h3>Browse artists &#128270;</h3>
+        <div id="artistsCollection">
+            <div>London</div>
+            <div>Paris</div>
+            <div>Tokyo</div>
+        </div>
+
+        <div id="albumsCollection">
+            <ul id="albumsList">
+                <li>album 1</li>
+                <li>album 2</li>
+                <li>album 3</li>
+            </ul>
+        </div>
     </div>
 
     <script src="{% static 'app/scripts/jquery-1.10.2.js' %}"></script>
     <script src="{% static 'app/scripts/bootstrap.js' %}"></script>
     <script src="{% static 'app/scripts/respond.js' %}"></script>
     <script src="{% static 'artistsApp/scripts/artistsAppCalls.js' %}"></script>
+    <script src="{% static 'app/scripts/tabsScript.js' %}"></script>
     <script type="text/javascript">
         var csrftoken = '{{ csrf_token }}';
     </script>

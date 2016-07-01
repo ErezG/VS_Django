@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="artistsApp\static\artistsApp\scripts\_references.js" />
+    <Content Include="app\static\app\scripts\tabsScript.js" />
     <Content Include="artistsApp\static\artistsApp\scripts\artistsAppCalls.js" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
