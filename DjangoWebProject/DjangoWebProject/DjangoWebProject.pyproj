@@ -34,6 +34,8 @@
     <Compile Include="app\urls.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
+    <Compile Include="artistsApp\migrations\0001_initial.py" />
+    <Compile Include="artistsApp\migrations\__init__.py" />
     <Compile Include="artistsApp\models.py" />
     <Compile Include="artistsApp\tests.py" />
     <Compile Include="artistsApp\urls.py" />
@@ -54,6 +56,7 @@
     <Folder Include="app\static\app\scripts\" />
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
+    <Folder Include="artistsApp\migrations\" />
     <Folder Include="artistsApp\static\" />
     <Folder Include="artistsApp\static\artistsApp\" />
     <Folder Include="artistsApp\static\artistsApp\scripts\" />
