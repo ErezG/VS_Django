@@ -6,5 +6,19 @@
 <h3>{{ message }}</h3>
 
 <p>Use this area to provide additional information.</p>
+<br/>
+<br/>
+<br/>
+<h3>Add Artist</h3>
+<input type="text" id="artistTxt"/>
+<br/>
+<input type="button" value="add" onclick="addArtist($('#artistTxt')[0].value)"/>
 
+<script type="text/javascript">
+    var csrftoken = '{{ csrf_token }}';
+</script>
+
+<script>
+    
+</script>
 {% endblock %}

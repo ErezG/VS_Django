@@ -34,6 +34,11 @@
     <Compile Include="app\tests.py" />
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
+    <Compile Include="artistsApp\models.py" />
+    <Compile Include="artistsApp\tests.py" />
+    <Compile Include="artistsApp\urls.py" />
+    <Compile Include="artistsApp\views.py" />
+    <Compile Include="artistsApp\__init__.py" />
     <Compile Include="manage.py" />
     <Compile Include="DjangoWebProject\__init__.py" />
     <Compile Include="DjangoWebProject\settings.py" />
@@ -50,8 +55,12 @@
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="DjangoWebProject\" />
+    <Folder Include="artistsApp\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\app\scripts\artistsAppCalls.js">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
