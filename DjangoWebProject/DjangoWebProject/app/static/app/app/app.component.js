@@ -19,7 +19,13 @@
                 </div>
 
                 <div id="browseArtistsTab" class ="tabcontent">
-                    <h3>Browse artists &#128270; </h3>
+                    <div>
+                        <h3>Browse artists &#128270; </h3>
+                        <h4>order ablums by: </h4>
+                        <select (change) ="onAlbumsOrderByChange($event.target.value)">
+                            <option *ngFor="let option of albumsOrderByOptions">{{option}}</option>
+                        </select>
+                    </div>
                     <div id="artistsCollection">
                         <ul class ="itemsList">
                             <li *ngFor="let artist of artists" (click)="onArtistSelect(artist)" [class.selected]="artist===selectedArtist">
@@ -128,8 +134,7 @@
                             dataType: "json",
                             async: true,
                             data: {
-                                csrfmiddlewaretoken: csrftoken,
-                                retrieved: NumOfArtists,
+                                csrfmiddlewaretoken: csrftoken
                             },
                             success: function (json) {
                                 NumOfArtists += json.numOfArtists;
@@ -151,6 +156,7 @@
                             data: {
                                 csrfmiddlewaretoken: csrftoken,
                                 artist: _this.selectedArtist.artistName,
+                                orderBy: _this.albumsOrderBy,
                                 retrieved: NumOfAlbums,
                             },
                             success: function (json) {
@@ -158,7 +164,7 @@
                                 var albumsList = $('#albumsList');
                                 for (var index in json.albums) {
                                     let album = json.albums[index];
-                                    albumsList.append(album.collectionName+':<br><img src="' + album.artworkUrl100 + '" alt="' + album.collectionName + '"><br><br><br>')
+                                    albumsList.append(album.collectionName + ':<br>released: ' +album.releaseDate + '<br><img src="' +album.artworkUrl100 + '" alt="' +album.collectionName + '"><br><br><br>')
                                 }
                                 _this.albums = _this.albums.concat(json.albums);
                             },
@@ -213,6 +219,19 @@
                 this.tabPrepare = {
                     addArtistTab: prepareAddArtistTab,
                     browseArtistsTab: prepareBrowseArtistsTab
+                };
+
+                this.albumsOrderByOptions = [
+                    'collectionName',
+                    'releaseDate'
+                ];
+                this.albumsOrderBy = this.albumsOrderByOptions[0];
+                this.onAlbumsOrderByChange = function (newSelection) {
+                    this.albumsOrderBy = newSelection;
+                    emptyAlbums();
+                    if (this.selectedArtist) {
+                        artistsAPI.getAlbums();
+                    }
                 };
 
                 $(document).ready(function() {

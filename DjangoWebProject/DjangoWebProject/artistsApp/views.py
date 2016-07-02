@@ -45,12 +45,9 @@ def addArtist(request):
 
 def getArtists(request):
     assert isinstance(request, HttpRequest)
-    
-    skip =  int(request.GET.get('retrieved', 0));
-    take = 20 if skip == 0 else 10;
 
-    # load from DB, 50 first time, 25 after.
-    artistsQuery = models.Artist.objects.order_by('artistName')[skip:skip+take];
+    # load from all DB.
+    artistsQuery = models.Artist.objects.order_by('artistName');
     artists = serializeModels(artistsQuery);
     return JsonResponse({'numOfArtists': len(artists), 'artists': artists});
 
