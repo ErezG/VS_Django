@@ -79,8 +79,10 @@
     <Folder Include="artistsApp\migrations\" />
     <Folder Include="DjangoWebProject\" />
     <Folder Include="artistsApp\" />
+    <Folder Include=".ebextensions\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include=".ebextensions\django.config" />
     <Content Include="app\static\app\angular\%40angular\common\bundles\common.umd.js" />
     <Content Include="app\static\app\angular\%40angular\common\bundles\common.umd.min.js" />
     <Content Include="app\static\app\angular\%40angular\compiler\bundles\compiler.umd.js" />
