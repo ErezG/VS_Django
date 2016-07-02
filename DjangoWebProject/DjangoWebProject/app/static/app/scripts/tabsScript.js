@@ -34,10 +34,10 @@ function prepareAddArtistTab() {
 };
 
 function prepareBrowseArtistsTab(){
-    alert("prepare browse tab");
+    getArtists();
 };
 
 tabPrepare = {
     addArtistTab: prepareAddArtistTab,
-    BrowseArtistsTab: prepareBrowseArtistsTab
+    browseArtistsTab: prepareBrowseArtistsTab
 }
