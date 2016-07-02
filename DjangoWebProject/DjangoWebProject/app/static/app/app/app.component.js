@@ -20,13 +20,14 @@
 
                 <div id="browseArtistsTab" class ="tabcontent">
                     <div>
-                        <h3>Browse artists &#128270; </h3>
+                        <h3>Browse artists</h3>
+                    </div>
+                    <br>
+                    <div id="artistsCollection">
                         <h4>order ablums by: </h4>
                         <select (change) ="onAlbumsOrderByChange($event.target.value)">
                             <option *ngFor="let option of albumsOrderByOptions">{{option}}</option>
                         </select>
-                    </div>
-                    <div id="artistsCollection">
                         <ul class ="itemsList">
                             <li *ngFor="let artist of artists" (click)="onArtistSelect(artist)" [class.selected]="artist===selectedArtist">
                                 <span class ="badge">{{artist.artistName}}</span>
@@ -34,7 +35,10 @@
                         </ul>
                     </div>
 
-                    <div id="albumsCollection">
+                    <div id="albumsCollection" *ngIf="selectedArtist">
+                        <h4>Search Album: </h4>
+                        <input [(ngModel)]="albumSearchTerm" placeholder="album's name" (keydown) ="searchAlbumByKeyDown($event)"/>
+                        <input type="button" value="search" (click) ="searchAlbum()"/>
                         <ul id="albumsList">
                         </ul>
                     </div>
@@ -100,7 +104,8 @@
                     NumOfAlbums = 0;
                     _this.albums =[];
                     var albumsList = $('#albumsList')[0];
-                    albumsList.innerHTML = '';
+                    if (albumsList)
+                        albumsList.innerHTML = '';
                 };
 
                 var artistsAPI = {
@@ -164,7 +169,7 @@
                                 var albumsList = $('#albumsList');
                                 for (var index in json.albums) {
                                     let album = json.albums[index];
-                                    albumsList.append(album.collectionName + ':<br>released: ' +album.releaseDate + '<br><img src="' +album.artworkUrl100 + '" alt="' +album.collectionName + '"><br><br><br>')
+                                    albumsList.append('<span id="album_' + album.collectionId + '">' + album.collectionName + ':</span><br>released: ' + album.releaseDate + '<br><img src="' + album.artworkUrl100 + '" alt="' + album.collectionName + '"><br><br><br>')
                                 }
                                 _this.albums = _this.albums.concat(json.albums);
                             },
@@ -232,6 +237,24 @@
                     if (this.selectedArtist) {
                         artistsAPI.getAlbums();
                     }
+                };
+
+                this.albumSearchTerm = ''
+                this.searchAlbum = function () {
+                    var term = this.albumSearchTerm.toLowerCase();
+                    for (var index in this.albums) {
+                        var album = this.albums[index];
+                        if (album.collectionName.toLowerCase().startsWith(term)) {
+                            var targetOffset = $('#album_' + album.collectionId)[0].offsetTop;
+                            window.scrollTo(0, targetOffset - 60);
+                            break;
+                        }
+                    }
+                    var a = 3;
+                };
+                this.searchAlbumByKeyDown = function (event) {
+                    if (event.key == "Enter")
+                        this.searchAlbum();
                 };
 
                 $(document).ready(function() {
