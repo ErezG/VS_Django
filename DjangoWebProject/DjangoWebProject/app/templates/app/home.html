@@ -8,6 +8,25 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
     <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+
+    <!-- 1. Load libraries -->
+    <!-- IE required polyfill -->
+    <script src="{% static 'app/angular/core-js/client/shim.min.js' %}"></script>
+
+    <script src="{% static 'app/angular/zone.js/dist/zone.js' %}"></script>
+    <script src="{% static 'app/angular/reflect-metadata/Reflect.js' %}"></script>
+
+    <script src="{% static 'app/angular/rxjs/bundles/Rx.umd.js' %}"></script>
+    <script src="{% static 'app/angular/@angular/core/bundles/core.umd.js' %}"></script>
+    <script src="{% static 'app/angular/@angular/common/bundles/common.umd.js' %}"></script>
+    <script src="{% static 'app/angular/@angular/compiler/bundles/compiler.umd.js' %}"></script>
+    <script src="{% static 'app/angular/@angular/platform-browser/bundles/platform-browser.umd.js' %}"></script>
+    <script src="{% static 'app/angular/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js' %}"></script>
+
+    <!-- 2. Load our 'modules' -->
+    <script src="{% static 'app/app/models.js' %}"></script>
+    <script src="{% static 'app/app/app.component.js' %}"></script>
+    <script src="{% static 'app/app/main.js' %}"></script>
 </head>
 
 <body>
@@ -40,6 +59,7 @@
     <div id="browseArtistsTab" class="tabcontent">
         <h3>Browse artists &#128270;</h3>
         <div id="artistsCollection">
+            <my-app></my-app>
             <div>London</div>
             <div>Paris</div>
             <div>Tokyo</div>
