@@ -77,14 +77,10 @@
     <Folder Include="app\templates\" />
     <Folder Include="app\templates\app\" />
     <Folder Include="artistsApp\migrations\" />
-    <Folder Include="artistsApp\static\" />
-    <Folder Include="artistsApp\static\artistsApp\" />
-    <Folder Include="artistsApp\static\artistsApp\scripts\" />
     <Folder Include="DjangoWebProject\" />
     <Folder Include="artistsApp\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="artistsApp\static\artistsApp\scripts\_references.js" />
     <Content Include="app\static\app\angular\%40angular\common\bundles\common.umd.js" />
     <Content Include="app\static\app\angular\%40angular\common\bundles\common.umd.min.js" />
     <Content Include="app\static\app\angular\%40angular\compiler\bundles\compiler.umd.js" />
@@ -107,7 +103,6 @@
     <Content Include="app\static\app\app\main.js" />
     <Content Include="app\static\app\app\models.js" />
     <Content Include="app\static\app\scripts\tabsScript.js" />
-    <Content Include="artistsApp\static\artistsApp\scripts\artistsAppCalls.js" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

@@ -1,39 +1,41 @@
 ﻿(function (app) {
-
-    let idRunner = 11;
-    const HEROES = [
-        new app.Hero(idRunner++, 'Mr. Nice'),
-        new app.Hero(idRunner++, 'Narco'),
-        new app.Hero(idRunner++, 'Bombasto'),
-        new app.Hero(idRunner++, 'Celeritas'),
-        new app.Hero(idRunner++, 'Magneta'),
-        new app.Hero(idRunner++, 'RubberMan'),
-        new app.Hero(idRunner++, 'Dynama'),
-        new app.Hero(idRunner++, 'Dr IQ'),
-        new app.Hero(idRunner++, 'Magma'),
-        new app.Hero(idRunner++, 'Tornado')
-    ];
-
     app.AppComponent =
         ng.core.Component({
             selector: 'my-app',
 
             template: `
-                <h1>{{title}}</h1>
-
-                <h2>My Heroes</h2>
-                <ul class="heroes">
-                    <li *ngFor="let hero of heroes" (click)="onSelect(hero)" [class.selected]="hero===selectedHero">
-                        <span class="badge">{{hero.id}}</span> {{hero.name}}
-                    </li>
+                <ul class ="tab">
+                    <li><a href="#" class ="tablinks"[class.active]="activeTab==='addArtistTab'" (click) ="onTabClick('addArtistTab')">Add artist</a></li>
+                    <li><a href="#" class ="tablinks"[class.active]="activeTab==='browseArtistsTab'" (click)="onTabClick('browseArtistsTab')">Browse artists</a></li>
                 </ul>
 
-                <div *ngIf="selectedHero">
-                    <h2>{{selectedHero.name}} details!</h2>
-                    <div><label>id: </label>{{selectedHero.id}}</div>
-                    <div>
-                        <label>name: </label>
-                        <input [(ngModel)]="selectedHero.name" placeholder="name"/>
+                <div id="addArtistTab" class ="tabcontent">
+                    <h3>Add Artist</h3>
+                    <input [(ngModel)]="addArtistText" placeholder="artist's name" (keydown) ="addArtistByKeyDown($event)"/>
+                    <input type="button" value="add" (click)="addArtist()"/>
+                    <br/>
+                    <br/>
+                    <div>{{addArtistResult}}</div>
+                </div>
+
+                <div id="browseArtistsTab" class ="tabcontent">
+                    <h3>Browse artists &#128270; </h3>
+                    <div id="artistsCollection">
+                        <ul class ="itemsList">
+                            <li *ngFor="let artist of artists" (click)="onArtistSelect(artist)" [class.selected]="artist===selectedArtist">
+                                <span class ="badge">{{artist.artistName}}</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div id="albumsCollection" *ngIf="albums">
+                        <ul>
+                            <li *ngFor="let album of albums">
+                                {{album.collectionName}}:<br>
+                                <img src="{{album.artworkUrl100}}" alt="{{album.collectionName}}">
+                                <br><br><br>
+                            </li>
+                        </ul>
                     </div>
                 </div>`,
 
@@ -42,13 +44,7 @@
                         background-color: #CFD8DC !important;
                         color: white;
                     }
-                    .heroes {
-                        margin: 0 0 2em 0;
-                        list-style-type: none;
-                        padding: 0;
-                        width: 15em;
-                    }
-                    .heroes li {
+                    .itemsList li {
                         cursor: pointer;
                         position: relative;
                         left: 0;
@@ -58,20 +54,20 @@
                         height: 1.6em;
                         border-radius: 4px;
                     }
-                    .heroes li.selected:hover {
+                    .itemsList li.selected: hover {
                         background-color: #BBD8DC !important;
                         color: white;
                     }
-                    .heroes li:hover {
+                    .itemsList li: hover {
                         color: #607D8B;
                         background-color: #DDD;
                         left: .1em;
                     }
-                    .heroes .text {
+                    .itemsList .text {
                         position: relative;
                         top: -3px;
                     }
-                    .heroes .badge {
+                    .itemsList .badge {
                         display: inline-block;
                         font-size: small;
                         color: white;
@@ -89,14 +85,124 @@
         })
         .Class({
             constructor: function () {
-                this.title = 'Tour of Heroes';
-                this.heroes = HEROES;
-                this.selectedHero = undefined;
-                this.onSelect = function (hero) {
-                    if (this.selectedHero === hero)
-                        this.selectedHero = undefined;
-                    else
-                        this.selectedHero = hero;
+                var _this = this;
+
+                var artistsAPI = {
+                    NumOfArtists: 0,
+                    NumOfAlbums: 0,
+
+                    addArtist: function () {
+                        _this.addArtistResult = '';
+                        var requestUrl = '/artists/addArtist';
+                        $.ajax({
+                            type: "POST",
+                            url: requestUrl,
+                            dataType: "json",
+                            async: true,
+                            data: {
+                                csrfmiddlewaretoken: csrftoken,
+                                artist: _this.addArtistText,
+                            },
+                            success: function (json) {
+                                _this.addArtistResult = json.result;
+                            },
+                            error: function (a, b, c) {
+                                console.log(b + ', ' + c);
+                            }
+                        });
+                    },
+
+                    getArtists: function () {
+                        var requestUrl = '/artists/getArtists';
+                        $.ajax({
+                            type: "GET",
+                            url: requestUrl,
+                            dataType: "json",
+                            async: true,
+                            data: {
+                                csrfmiddlewaretoken: csrftoken,
+                                retrieved: this.NumOfArtists,
+                            },
+                            success: function (json) {
+                                this.NumOfArtists += json.numOfArtists;
+                                _this.artists = _this.artists.concat(json.artists);
+                            },
+                            error: function (a, b, c) {
+                                console.log(b + ', ' + c);
+                            }
+                        });
+                    },
+
+                    getAlbums: function () {
+                        var requestUrl = '/artists/getAlbums';
+                        $.ajax({
+                            type: "GET",
+                            url: requestUrl,
+                            dataType: "json",
+                            async: true,
+                            data: {
+                                csrfmiddlewaretoken: csrftoken,
+                                artist: _this.selectedArtist.artistName,
+                                retrieved: this.NumOfAlbums,
+                            },
+                            success: function (json) {
+                                this.NumOfAlbums += json.numOfAlbums;
+                                _this.albums = _this.albums.concat(json.albums);
+                            },
+                            error: function (a, b, c) {
+                                console.log(b + ', ' + c);
+                            }
+                        });
+                    }
+                }
+
+                this.addArtistText = '';
+                this.addArtistResult = '';
+
+                this.artists = [];
+                this.albums = [];
+                this.activeTab = undefined;
+                this.selectedArtist = undefined;
+                this.addArtist = function () {
+                    artistsAPI.addArtist();
+                };
+                this.addArtistByKeyDown = function (event) {
+                    if (event.key == "Enter")
+                        this.addArtist();
+                };
+                this.onArtistSelect = function (artist) {
+                    this.albums = [];
+                    artistsAPI.NumOfAlbums = 0;
+                    if (this.selectedArtist === artist) {
+                        this.selectedArtist = undefined;
+                    }
+                    else {
+                        this.selectedArtist = artist;
+                        artistsAPI.getAlbums();
+                    }
+                };
+                this.onTabClick = function (tabName) {
+                    activeTab = tabName;
+                    var prepFunc = this.tabPrepare[tabName];
+                    if (prepFunc)
+                        prepFunc();
+                    openTab(tabName);
+                };
+
+                function prepareAddArtistTab() {
+                    _this.addArtistText = '';
+                    _this.addArtistResult = '';
+                };
+                function prepareBrowseArtistsTab() {
+                    _this.artists = [];
+                    _this.albums = [];
+                    artistsAPI.NumOfAlbums = 0;
+                    artistsAPI.NumOfArtists = 0;
+                    artistsAPI.getArtists();
+                };
+                this.tabPrepare = {
+                    addArtistTab: prepareAddArtistTab,
+                    browseArtistsTab: prepareBrowseArtistsTab
                 };
             }
         });

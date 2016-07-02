@@ -47,7 +47,7 @@ def getArtists(request):
     assert isinstance(request, HttpRequest)
     
     skip =  int(request.GET.get('retrieved', 0));
-    take = 50 if skip == 0 else 25;
+    take = 20 if skip == 0 else 10;
 
     # load from DB, 50 first time, 25 after.
     artistsQuery = models.Artist.objects.order_by('artistName')[skip:take];
@@ -58,7 +58,7 @@ def getAlbums(request):
     assert isinstance(request, HttpRequest)
     
     skip =  int(request.GET.get("retrieved", 0));
-    take = 50 if skip == 0 else 25;
+    take = 20 if skip == 0 else 10;
     artistName = request.GET.get('artist');
     orderBy = request.GET.get('orderBy', 'collectionName');# collectionName / releaseDate
 
@@ -66,7 +66,7 @@ def getAlbums(request):
     artist = models.Artist.objects.get(artistName = artistName);
     albumsQuery = models.Album.objects.filter(artist = artist).order_by(orderBy)[skip:take];
     albums = serializeModels(albumsQuery);
-    return JsonResponse({'numOfAlbums': len(artists), 'albums': albums});
+    return JsonResponse({'numOfAlbums': len(albums), 'albums': albums});
 
 def serializeModels(itemsQuery):
     items = [];
