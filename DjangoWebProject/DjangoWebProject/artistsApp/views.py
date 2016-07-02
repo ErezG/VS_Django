@@ -50,7 +50,7 @@ def getArtists(request):
     take = 20 if skip == 0 else 10;
 
     # load from DB, 50 first time, 25 after.
-    artistsQuery = models.Artist.objects.order_by('artistName')[skip:take];
+    artistsQuery = models.Artist.objects.order_by('artistName')[skip:skip+take];
     artists = serializeModels(artistsQuery);
     return JsonResponse({'numOfArtists': len(artists), 'artists': artists});
 
@@ -64,7 +64,7 @@ def getAlbums(request):
 
     # load from DB, 50 first time, 25 after, according to order by(name, date).
     artist = models.Artist.objects.get(artistName = artistName);
-    albumsQuery = models.Album.objects.filter(artist = artist).order_by(orderBy)[skip:take];
+    albumsQuery = models.Album.objects.filter(artist = artist).order_by(orderBy)[skip:skip+take];
     albums = serializeModels(albumsQuery);
     return JsonResponse({'numOfAlbums': len(albums), 'albums': albums});
 

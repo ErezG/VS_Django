@@ -28,13 +28,8 @@
                         </ul>
                     </div>
 
-                    <div id="albumsCollection" *ngIf="albums">
-                        <ul>
-                            <li *ngFor="let album of albums">
-                                {{album.collectionName}}:<br>
-                                <img src="{{album.artworkUrl100}}" alt="{{album.collectionName}}">
-                                <br><br><br>
-                            </li>
+                    <div id="albumsCollection">
+                        <ul id="albumsList">
                         </ul>
                     </div>
                 </div>`,
@@ -87,9 +82,22 @@
             constructor: function () {
                 var _this = this;
 
+                var NumOfArtists = 0;
+                var NumOfAlbums = 0;
+
+                function emptyArtists() {
+                    NumOfArtists = 0;
+                    _this.artists = [];
+                };
+
+                function emptyAlbums() {
+                    NumOfAlbums = 0;
+                    _this.albums =[];
+                    var albumsList = $('#albumsList')[0];
+                    albumsList.innerHTML = '';
+                };
+
                 var artistsAPI = {
-                    NumOfArtists: 0,
-                    NumOfAlbums: 0,
 
                     addArtist: function () {
                         _this.addArtistResult = '';
@@ -121,10 +129,10 @@
                             async: true,
                             data: {
                                 csrfmiddlewaretoken: csrftoken,
-                                retrieved: this.NumOfArtists,
+                                retrieved: NumOfArtists,
                             },
                             success: function (json) {
-                                this.NumOfArtists += json.numOfArtists;
+                                NumOfArtists += json.numOfArtists;
                                 _this.artists = _this.artists.concat(json.artists);
                             },
                             error: function (a, b, c) {
@@ -143,10 +151,15 @@
                             data: {
                                 csrfmiddlewaretoken: csrftoken,
                                 artist: _this.selectedArtist.artistName,
-                                retrieved: this.NumOfAlbums,
+                                retrieved: NumOfAlbums,
                             },
                             success: function (json) {
-                                this.NumOfAlbums += json.numOfAlbums;
+                                NumOfAlbums += json.numOfAlbums;
+                                var albumsList = $('#albumsList');
+                                for (var index in json.albums) {
+                                    let album = json.albums[index];
+                                    albumsList.append(album.collectionName+':<br><img src="' + album.artworkUrl100 + '" alt="' + album.collectionName + '"><br><br><br>')
+                                }
                                 _this.albums = _this.albums.concat(json.albums);
                             },
                             error: function (a, b, c) {
@@ -171,8 +184,7 @@
                         this.addArtist();
                 };
                 this.onArtistSelect = function (artist) {
-                    this.albums = [];
-                    artistsAPI.NumOfAlbums = 0;
+                    emptyAlbums();
                     if (this.selectedArtist === artist) {
                         this.selectedArtist = undefined;
                     }
@@ -194,16 +206,26 @@
                     _this.addArtistResult = '';
                 };
                 function prepareBrowseArtistsTab() {
-                    _this.artists = [];
-                    _this.albums = [];
-                    artistsAPI.NumOfAlbums = 0;
-                    artistsAPI.NumOfArtists = 0;
+                    emptyArtists();
+                    emptyAlbums();
                     artistsAPI.getArtists();
                 };
                 this.tabPrepare = {
                     addArtistTab: prepareAddArtistTab,
                     browseArtistsTab: prepareBrowseArtistsTab
                 };
+
+                $(document).ready(function() {
+	                var win = $(window);
+
+	                // Each time the user scrolls
+	                win.scroll(function() {
+		                // End of the document reached?
+		                if ($(document).height() - win.height() == win.scrollTop()) {
+		                    artistsAPI.getAlbums();
+		                }
+	                });
+                });
             }
         });
 })(window.app || (window.app = {}));
