@@ -15,6 +15,7 @@
                     <input type="button" value="add" (click)="addArtist()"/>
                     <br/>
                     <br/>
+                    <img width="50" src="http://i.imgur.com/8YsAmq3.gif" *ngIf="loading"/>
                     <div>{{addArtistResult}}</div>
                 </div>
 
@@ -41,6 +42,7 @@
                         <input type="button" value="search" (click) ="searchAlbum()"/>
                         <ul id="albumsList">
                         </ul>
+                        <img width="100" src="http://i.imgur.com/8YsAmq3.gif" *ngIf="loading"/>
                     </div>
                 </div>`,
 
@@ -127,6 +129,12 @@
                             },
                             error: function (a, b, c) {
                                 console.log(b + ', ' + c);
+                            },
+                            beforeSend: function (a, b) {
+                                _this.loading = true;
+                            },
+                            complete: function (a, b) {
+                                _this.loading = false;
                             }
                         });
                     },
@@ -147,6 +155,12 @@
                             },
                             error: function (a, b, c) {
                                 console.log(b + ', ' + c);
+                            },
+                            beforeSend: function (a, b) {
+                                _this.loading = true;
+                            },
+                            complete: function (a, b) {
+                                _this.loading = false;
                             }
                         });
                     },
@@ -175,6 +189,12 @@
                             },
                             error: function (a, b, c) {
                                 console.log(b + ', ' + c);
+                            },
+                            beforeSend: function (a, b) {
+                                _this.loading = true;
+                            },
+                            complete: function (a, b) {
+                                _this.loading = false;
                             }
                         });
                     }
@@ -183,6 +203,7 @@
                 this.addArtistText = '';
                 this.addArtistResult = '';
 
+                this.loading = false;
                 this.artists = [];
                 this.albums = [];
                 this.activeTab = undefined;
